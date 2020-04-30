@@ -1,0 +1,508 @@
+<!-- ReXamHome  : Last update on 30 April 2020  
+This program records student's computer screen, webcam video+audio for proctoring an exam conducted at home.  
+The program was written by make use of the following libaries and sample codes:
+  RecordRTC v5.5.9 (www.WebRTC-Experiment.com/licence)
+  jquery
+  CryptoJS v3.1.2
+This one is a single-file-CDN version that requires network connection to work.
+-->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body {
+                font-family:Verdana, Geneva, sans-serif;
+                font-size:12px;
+            }
+            @media screen and (min-width: 600px) {
+                body {
+                    font-size: 24px;
+                }
+            } 
+            @media (min-width: 350px) and (min-resolution: 192dpi) {
+               body {
+                    font-size: 24px;
+               }
+            }   
+            .header {
+                margin-top:0.5em;
+                margin-bottom:0.5em;
+                padding-top:0.3em;
+                padding-bottom:0.3em;
+                text-align: center;
+                background: #000066;
+                color: white;
+                font-size: 1.5em;
+                font-weight:normal;
+            }
+            .footer {
+                margin-top:0.5em;
+                margin-bottom:0.5em;
+                padding-top:0.5em;
+                padding-bottom:0.5em;
+                background: #777777;
+                color: white;
+                font-weight:normal;
+                font-size:1em;
+            }            
+            .button_container {
+                margin-top:0.5em;
+                margin-bottom:0.25em;
+                font-size: 1em;
+            }
+            video {
+                margin-top:0px;
+                margin-bottom:0px;
+                max-width: 400px;
+                background:#000000;
+            }
+            button {
+                font-size: 1em;
+                cursor:pointer;
+            }
+            .cid_sid_container {
+                margin-top:0.5em;
+                color: black;
+                font-size: 1em;
+                font-weight:normal;
+            }
+            #cid {
+                margin-bottom:0.5em;
+            }
+
+            #btn {
+                font-size:1em;
+                margin-top:0.5em;
+            }
+            #f1 {
+                font-size:1em;
+                margin-top:0.5em;
+                width:100%;
+            }
+
+            #hashval {
+                margin-top:0.25em;
+                margin-bottom:0.25em;
+                padding-top:0.25em;
+                text-align: center;
+                background: #999999;
+                color: white;
+                font-size: 1.5em;
+                font-weight:normal;
+                font-family:Verdana, Geneva, sans-serif; 
+                height:1.7em;
+            }
+            #myProgress {
+              width: 100%;
+              background-color: #ddd;
+            }
+
+            #myBar {
+              width: 0%;
+              height: 0.5em;
+              background-color: #4CAF50;
+            } 
+
+            #vdo_container {
+              background-color: #000000;
+              margin:0px;        
+              text-align: center;
+
+            }   
+            hr {
+                margin-top:0.5em;
+                margin-bottom:0.5em;
+            }
+            #rec-time {
+            }
+            .vbar {
+                margin-right:3px;
+                margin-left:2px;
+                color:#888888;
+            }
+            #btn-stop-recording {
+                background-color: #eeeeee;
+                border:1px solid gray;
+                border-radius: 0.2em;            
+                color: #aa0000;
+            }
+            #btn-start-recording {
+                background-color: #eeeeee;
+                color: #00aa00;
+                border: 1px solid gray;
+                border-radius: 0.2em;            
+            }    
+            a {
+                text-decoration: none;
+                color:white;
+            }
+            a:hover {
+                text-decoration: underline;
+                color:white;
+            }
+            .help {
+                padding-left:0.3em;
+                padding-right:0.3em;
+                margin-bottom:1em;
+                color:#ffffff;
+            }
+        </style>
+    <!--    <script src="jquery.min.js"></script>    
+        <script src="RecordRTC.js"></script>
+        <script src="EBML.js"></script>
+        <script src="core.js"></script>
+        <script src="md5.js"></script>
+    -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/RecordRTC/5.5.9/RecordRTC.min.js"></script>
+        <script src="https://www.webrtc-experiment.com/EBML.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/core.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/md5.js"></script>
+        
+
+        <script>
+            //initialization on document loaded. 
+            var fullscr = false;
+            function init() {        
+                if ( window.location !== window.parent.location ) {	
+                    document.querySelector('body').style.fontSize = "12px";
+                    fullscr = true;
+                }
+
+                //Showing picture from webcam
+                var video = document.getElementById("videoWebCam");
+                if (navigator.mediaDevices.getUserMedia) {
+                    navigator.mediaDevices.getUserMedia({
+                            video: true,
+                        })
+                        .then(function(stream) {
+                            video.srcObject = stream;
+                        })
+                        .catch(function(error) {
+                            console.log("Something went wrong!");
+                        });
+                }
+                //This part is on screen recording
+                var recorder; // globally accessible            
+                var video2 = document.querySelector('#scrpreview');
+                if (!navigator.getDisplayMedia && !navigator.mediaDevices.getDisplayMedia) {
+                    var error = 'Your browser does NOT support the getDisplayMedia API.';
+                    document.querySelector('h3').innerHTML = error;
+                    document.querySelector('#scrpreview').style.display = 'none';
+                    document.getElementById('btn-start-recording').style.display = 'none';
+                    document.getElementById('btn-stop-recording').style.display = 'none';
+                    throw new Error(error);
+                }
+
+                document.getElementById('btn-start-recording').onclick = function() {
+                    captureScreen(function(screen) {
+                        video2.volume = 0;
+                        video2.srcObject = screen;
+                        recorder = RecordRTC(screen, {
+                            type: 'video',
+                            mimetye:'video/webm',
+                            //bitsPerSecond: 512000, //for students with low storage space
+                            bitsPerSecond: 1024000,
+                            frameRate:5,
+                            //timeSlice: 2000 // pass this parameter
+                            timeSlice: 1000, // pass this parameter
+                            onTimeStamp: function(timestamp, timestamps) {
+                                var duration = (new Date().getTime() - timestamps[0]) / 1000;
+                                var ttext = Math.round(duration);
+                                if(duration < 0) return;
+                                document.getElementById('rec-time').innerHTML = "REC: " + ttext + " s";
+                            }
+                        });
+                        recorder.startRecording();
+                        // release screen on stopRecording
+                        recorder.screen = screen;
+                        document.getElementById('btn-start-recording').disabled = true;
+                        document.getElementById('btn-start-recording').style.display = "none";
+                        document.getElementById('btn-stop-recording').disabled = false;
+                        document.getElementById('btn-stop-recording').style.display = "inline";
+
+                        if (fullscr) {
+                            var elem_win = parent.document.documentElement;
+                            openFullscreen(elem_win);  
+                        }
+                    });
+                };
+
+                document.getElementById('btn-stop-recording').onclick = function() {
+                    this.disabled = true;
+                    this.style.display = "none";
+                    document.getElementById('btn-start-recording').disabled = false;
+                    document.getElementById('btn-start-recording').style.display = "inline";          
+                    recorder.stopRecording(stopRecordingCallback);
+                };
+
+                function invokeGetDisplayMedia(success, error) {
+                    var displaymediastreamconstraints = {
+                        video2: {
+                            displaySurface: 'monitor', // monitor, window, application, browser
+                            logicalSurface: true,
+                            cursor: 'always' // never, always, motion
+                        }
+                    };
+                    // above constraints are NOT supported YET
+                    // that's why overridnig them
+                    displaymediastreamconstraints = {
+                        video2: true
+                    };
+
+                    if (navigator.mediaDevices.getDisplayMedia) {
+                        navigator.mediaDevices.getDisplayMedia(displaymediastreamconstraints).then(success).catch(error);
+                    } else {
+                        navigator.getDisplayMedia(displaymediastreamconstraints).then(success).catch(error);
+                    }
+                }
+
+                function captureScreen(callback) {
+                    invokeGetDisplayMedia(function(screen) {
+    //
+                        if (document.getElementById("audiorec").checked) {
+                            navigator.mediaDevices.getUserMedia({audio:true}).then(function(mic) {
+                                screen.addTrack(mic.getTracks()[0]);
+                                //config.onMediaCaptured(screenStream);
+                                addStreamStopListener(screen, function() {
+                                    document.getElementById('btn-stop-recording').click();
+                                });
+                                callback(screen);    
+                            });
+                        } else {
+                                addStreamStopListener(screen, function() {
+                                    document.getElementById('btn-stop-recording').click();
+                                });
+                                callback(screen);                        
+                        }
+    //                    
+
+                    }, function(error) {
+                        console.error(error);
+                        alert('Unable to capture your screen. Please check console logs.\n' + error);
+                    });
+                };
+
+                function stopRecordingCallback() {
+                    console.log(document.getElementById("cid"));
+                    var courseId = document.getElementById("cid").value;
+                    var studentId = document.getElementById("sid").value; 
+                    if (courseId != "" & studentId != "" ) {
+                        filename = courseId + "-" + studentId + ".webm";
+                    } else {
+                        var d = new Date();
+                        var n = d.toString();
+                        var timestamp = d.getTime();
+                        var date = d.getDate();
+                        var month = d.getMonth();
+                        var year = d.getFullYear();
+                        var  time = d.toLocaleTimeString();
+                        var dateString = date + "-" +(month + 1) + "-" + year + "-" +  time;
+                        console.log(dateString);
+                        filename = dateString + ".webm";
+                    }
+
+                    video2.src = video2.srcObject = null;
+                    video2.src = URL.createObjectURL(recorder.getBlob());
+                    video2.currentTime = 9999999999;
+
+                    recorder.screen.stop();
+                    let blob = recorder.getBlob();
+
+                    getSeekableBlob(blob, function(seekableBlob) {
+                        invokeSaveAsDialog(seekableBlob, filename);
+                    });
+
+                    recorder.destroy();
+                    recorder = null;
+                };
+
+                function addStreamStopListener(stream, callback) {
+                    stream.addEventListener('ended', function() {
+                        callback();
+                        callback = function() {};
+                    }, false);
+                    stream.addEventListener('inactive', function() {
+                        callback();
+                        callback = function() {};
+                    }, false);
+                    stream.getTracks().forEach(function(track) {
+                        track.addEventListener('ended', function() {
+                            callback();
+                            callback = function() {};
+                        }, false);
+                        track.addEventListener('inactive', function() {
+                            callback();
+                            callback = function() {};
+                        }, false);
+                    });
+                };
+
+            };            
+        </script>
+
+        <script>
+            //Added function to allow an option to hide a video recording monitor
+            function monitorOnOff() {
+              var checkBox = document.getElementById("myCheck");
+              var text = document.getElementById("scrpreview");
+              if (checkBox.checked == false){
+                text.style.visibility = "hidden";
+              } else {
+                 text.style.visibility = "visible";
+              }
+            };
+
+            //test, debug
+            function courseid() {
+                    console.log(document.getElementById("cid"));
+                    console.log(document.getElementById("cid").value);
+            };
+        </script>    
+
+        <script>
+         //Encryption and Hashing Part
+            function process() {
+              getMD5(
+                document.getElementById("f1").files[0],
+        //        prog => console.log("Progress: " + prog)
+                  prog => movebar(prog)
+              ).then(
+                res => showmd5(res),
+                err => console.error(err)
+              );
+            }
+
+            function readChunked(file, chunkCallback, endCallback) {
+              var fileSize   = file.size;
+              var chunkSize  = 4 * 1024 * 1024; // 4MB
+              var offset     = 0;
+
+              var reader = new FileReader();
+              reader.onload = function() {
+                if (reader.error) {
+                  endCallback(reader.error || {});
+                  return;
+                }
+                offset += reader.result.length;
+                // callback for handling read chunk
+                // TODO: handle errors
+                chunkCallback(reader.result, offset, fileSize); 
+                if (offset >= fileSize) {
+                  endCallback(null);
+                  return;
+                }
+                readNext();
+              };
+
+              reader.onerror = function(err) {
+                endCallback(err || {});
+              };
+
+              function readNext() {
+                var fileSlice = file.slice(offset, offset + chunkSize);
+                reader.readAsBinaryString(fileSlice);
+              }
+              readNext();
+            }
+
+            function getMD5(blob, cbProgress) {
+              return new Promise((resolve, reject) => {
+                var md5 = CryptoJS.algo.MD5.create();
+                readChunked(blob, (chunk, offs, total) => {
+                  md5.update(CryptoJS.enc.Latin1.parse(chunk));
+                  if (cbProgress) {
+                    cbProgress(offs / total);
+                  }
+                }, err => {
+                  if (err) {
+                    reject(err);
+                  } else {
+                    // TODO: Handle errors
+                    var hash = md5.finalize();
+                    var hashHex = hash.toString(CryptoJS.enc.Hex);
+                    resolve(hashHex);
+                  }
+                });
+              });
+            }    
+
+            function showmd5(res) {
+                res2 = res.toString();
+                document.getElementById("hashval").innerHTML = res2.substring(0, 10);    
+            }
+            function clearHash() {
+                movebar(0);
+                document.getElementById("hashval").innerHTML = "";    
+            }
+
+            function movebar(prg) {
+                var prg2 = prg*100;
+                var elem = document.getElementById("myBar");
+                elem.style.width = prg2.toString() + "%";
+            }
+
+        </script>
+        <script>
+            function openFullscreen(elem_win) {
+              if (elem_win.requestFullscreen) {
+                elem_win.requestFullscreen();
+              } else if (elem_win.mozRequestFullScreen) { /* Firefox */
+                elem_win.mozRequestFullScreen();
+              } else if (elem_win.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                elem_win.webkitRequestFullscreen();
+              } else if (elem_win.msRequestFullscreen) { /* IE/Edge */
+                elem_win.msRequestFullscreen();
+              }
+            }        
+        </script>
+
+    </head>
+    <body onload="init();">
+        <div class="header">Recorder</div>
+        <div class="button_container">
+        <button id="btn-start-recording" onclick="startRecording();">Start Rec.</button>
+        <button id="btn-stop-recording" disabled="" style="display:none">Stop Rec.</button>
+        <span class="vbar">|</span><span id="rec-time">REC: </span>    
+        </div>
+
+        <div id="vdo_container">
+        <video id="scrpreview" controls="" autoplay="" playsinline="" style="width:100%"></video></div>
+        <div class="button_container">
+        Monitor <input type="checkbox" id="myCheck"  onclick="monitorOnOff();" checked>
+        <span class="vbar">|</span>Audio Rec. <input type="checkbox" id="audiorec" checked>
+        </div>
+        <div class="button_container">
+        </div>    
+        <hr>
+        <div class="cid_sid_container">
+        <label for="cid">Course ID:</label><br>
+        <input type="text" id="cid" name="cid" value="" onblur="courseid()"><br>
+        <label for="sid">Student ID:</label><br>
+        <input type="text" id="sid" name="sid" value="">
+        </div>
+
+        <hr>
+        <div id="vdo_container">
+            <video autoplay="true" id="videoWebCam" style="width: 100%;">
+            </video>
+        </div>
+        <hr>
+        <!--<footer style="margin-top: 20px; text-align: left; font-family: sans-serif; font-size:small ">
+            <p><b>Browser support:</b> Firefox, Edge and Chrome &gt;= 71</p>
+            <div><small id="send-message"></small></div>
+        </footer> -->    
+        <div class="header">Checksum</div>
+        <input type="file" id="f1" size="60" onclick="clearHash()"> <br>   
+        <button id="btn" onclick="process()">Cal. Checksum</button>    
+        <div id="hashval"></div>
+        <div id="myProgress">
+          <div id="myBar"></div>
+        </div>
+        <div class="footer" id="footerid">
+            <div class="help">1. <b>Start Rec.</b>: เริ่มบันทึก<br>2. <b>Stop Rec.</b>: หยุดบันทึก<br>3. <b>Choose File</b>: เลือกไฟล์เพื่อคำนวณ Checksum<br>4. <b>Cal. Checksum</b>: คำนวณค่า Checksum</div>    
+            <hr>
+            <div class="help"> <a href="http://www.it.kmitl.ac.th" target="_blank"><b>ReXamHome</b></a> <span class="vbar" style="color:white;">|</span> <a href="http://www.it.kmitl.ac.th" target="_blank"><b>ITKMITL</b></a></div>
+        </div>    
+    </body>
+</html>
