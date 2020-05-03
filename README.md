@@ -1,5 +1,5 @@
 
-# ReXamHome : Screen Recorder for proctoring exam from home
+# ReXamHome : Screen recorder for proctoring exam from home
 
 ReXamHome is a small web (html+javascript) program that is used
 to record a computer screen and webcam to a video file.
