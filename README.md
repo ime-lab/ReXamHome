@@ -1,5 +1,5 @@
 
-#ReXamHome : Screen Recorder for proctoring exam from home
+# ReXamHome : Screen Recorder for proctoring exam from home
 
 ReXamHome is a small web (html+javascript) program that is used
 to record a computer screen and webcam to a video file.
@@ -31,5 +31,10 @@ For more information on related libaries see:
 - https://github.com/muaz-khan/RecordRTC
 - https://cryptojs.gitbook.io/docs/
 
+See also related blogs below.
+- [การจัดสอบในที่พักของผู้สอบ](https://medium.com/@nop_itkmitl/การจัดสอบในที่พักของผู้สอบ-exam-from-home-ตอนที่-1-55508acc735f)
+- [ReXamHome : โปรแกรมบันทึกหน้าจอการทำข้อสอบจากที่บ้าน](https://medium.com/@nop_itkmitl/rexamhome-โปรแกรมบันทึกหน้าจอการทำข้อสอบจากที่บ้าน-d3d34582a5f6)
 
 The program was developed for use at the Faculty of Information Technology (IT), King Mongkut's Institute of Technology Ladkrabang (KMITL). It is part of the research project on online learning and examination at the Interactive Media and Security Lab (ime-lab), Faculty of IT, KMITL.
+
+[ITKMITL](http://www.it.kmitl.ac.th)
