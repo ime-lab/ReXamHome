@@ -1,3 +1,4 @@
+//From https://www.webrtc-experiment.com/EBML.js
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.EBML = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -202,7 +203,7 @@ var EBMLDecoder = /** @class */ (function () {
                 tagObj.value = tools_1.convertEBMLDateToJSDate(new int64_buffer_1.Int64BE(data).toNumber());
                 break;
             // nano second; Date.UTC(2001,1,1,0,0,0,0) === 980985600000
-            // Date - signed 8 octets integer in nanoseconds with 0 indicating 
+            // Date - signed 8 octets integer in nanoseconds with 0 indicating
             // the precise beginning of the millennium (at 2001-01-01T00:00:00,000000000 UTC)
         }
         if (tagObj.value === null) {
@@ -947,7 +948,7 @@ function makeMetadataSeekable(originalMetadata, duration, cuesInfo) {
     // After the header comes the Segment open tag, which in this implementation is always 12 bytes (4 byte id, 8 byte 'unknown length')
     // After that the segment content starts. All SeekPositions and CueClusterPosition must be relative to segmentContentStartPos
     var segmentContentStartPos = headerSize + 12;
-    //console.error("segmentContentStartPos: " + segmentContentStartPos);    
+    //console.error("segmentContentStartPos: " + segmentContentStartPos);
     // find the original metadata size, and adjust it for header size and Segment start element so we can keep all positions relative to segmentContentStartPos
     var originalMetadataSize = originalMetadata[originalMetadata.length - 1].dataEnd - segmentContentStartPos;
     //console.error("Original Metadata size: " + originalMetadataSize);
@@ -958,17 +959,17 @@ function makeMetadataSeekable(originalMetadata, duration, cuesInfo) {
     info.splice(1, 0, { name: "Duration", type: "f", data: createFloatBuffer(duration, 8) });
     var infoSize = encodedSizeOfEbml(info);
     //console.error("Info size: " + infoSize);
-    //printElementIds(info);  
+    //printElementIds(info);
     // extract the track info, we can re-use this as is
     var tracks = extractElement("Tracks", originalMetadata);
     var tracksSize = encodedSizeOfEbml(tracks);
     //console.error("Tracks size: " + tracksSize);
-    //printElementIds(tracks);  
+    //printElementIds(tracks);
     var seekHeadSize = 47; // Initial best guess, but could be slightly larger if the Cues element is huge.
     var seekHead = [];
-    var cuesSize = 5 + cuesInfo.length * 15; // very rough initial approximation, depends a lot on file size and number of CuePoints                   
+    var cuesSize = 5 + cuesInfo.length * 15; // very rough initial approximation, depends a lot on file size and number of CuePoints
     var cues = [];
-    var lastSizeDifference = -1; // 
+    var lastSizeDifference = -1; //
     // The size of SeekHead and Cues elements depends on how many bytes the offsets values can be encoded in.
     // The actual offsets in CueClusterPosition depend on the final size of the SeekHead and Cues elements
     // We need to iteratively converge to a stable solution.
@@ -977,14 +978,14 @@ function makeMetadataSeekable(originalMetadata, duration, cuesInfo) {
         // SeekHead starts at 0
         var infoStart = seekHeadSize; // Info comes directly after SeekHead
         var tracksStart = infoStart + infoSize; // Tracks comes directly after Info
-        var cuesStart = tracksStart + tracksSize; // Cues starts directly after 
-        var newMetadataSize = cuesStart + cuesSize; // total size of metadata  
+        var cuesStart = tracksStart + tracksSize; // Cues starts directly after
+        var newMetadataSize = cuesStart + cuesSize; // total size of metadata
         // This is the offset all CueClusterPositions should be adjusted by due to the metadata size changing.
         var sizeDifference = newMetadataSize - originalMetadataSize;
         // console.error(`infoStart: ${infoStart}, infoSize: ${infoSize}`);
         // console.error(`tracksStart: ${tracksStart}, tracksSize: ${tracksSize}`);
         // console.error(`cuesStart: ${cuesStart}, cuesSize: ${cuesSize}`);
-        // console.error(`originalMetadataSize: ${originalMetadataSize}, newMetadataSize: ${newMetadataSize}, sizeDifference: ${sizeDifference}`); 
+        // console.error(`originalMetadataSize: ${originalMetadataSize}, newMetadataSize: ${newMetadataSize}, sizeDifference: ${sizeDifference}`);
         // create the SeekHead element
         seekHead = [];
         seekHead.push({ name: "SeekHead", type: "m", isEnd: false });
@@ -1003,7 +1004,7 @@ function makeMetadataSeekable(originalMetadata, duration, cuesInfo) {
         seekHead.push({ name: "SeekHead", type: "m", isEnd: true });
         seekHeadSize = encodedSizeOfEbml(seekHead);
         //console.error("SeekHead size: " + seekHeadSize);
-        //printElementIds(seekHead);  
+        //printElementIds(seekHead);
         // create the Cues element
         cues = [];
         cues.push({ name: "Cues", type: "m", isEnd: false });
@@ -1024,9 +1025,9 @@ function makeMetadataSeekable(originalMetadata, duration, cuesInfo) {
         });
         cues.push({ name: "Cues", type: "m", isEnd: true });
         cuesSize = encodedSizeOfEbml(cues);
-        //console.error("Cues size: " + cuesSize);   
+        //console.error("Cues size: " + cuesSize);
         //console.error("Cue count: " + cuesInfo.length);
-        //printElementIds(cues);      
+        //printElementIds(cues);
         // If the new MetadataSize is not the same as the previous iteration, we need to run once more.
         if (lastSizeDifference !== sizeDifference) {
             lastSizeDifference = sizeDifference;

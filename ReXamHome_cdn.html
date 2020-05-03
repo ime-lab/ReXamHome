@@ -1,5 +1,5 @@
-<!-- ReXamHome  : Last update on 30 April 2020  
-This program records student's computer screen, webcam video+audio for proctoring an exam conducted at home.  
+<!-- ReXamHome  : Last update on 1 May 2020 by IME-LAB ITKMITL
+This program records student's computer screen, webcam video+audio for proctoring an exam conducted at home.
 The program was written by make use of the following libaries and sample codes:
   RecordRTC v5.5.9 (www.WebRTC-Experiment.com/licence)
   jquery
@@ -8,6 +8,7 @@ This one is a single-file-CDN version that requires network connection to work.
 -->
 <html>
     <head>
+        <title>ReXamHome Main</title>            
         <meta charset="UTF-8">
         <style>
             body {
@@ -18,12 +19,12 @@ This one is a single-file-CDN version that requires network connection to work.
                 body {
                     font-size: 24px;
                 }
-            } 
+            }
             @media (min-width: 350px) and (min-resolution: 192dpi) {
                body {
                     font-size: 24px;
                }
-            }   
+            }
             .header {
                 margin-top:0.5em;
                 margin-bottom:0.5em;
@@ -44,7 +45,7 @@ This one is a single-file-CDN version that requires network connection to work.
                 color: white;
                 font-weight:normal;
                 font-size:1em;
-            }            
+            }
             .button_container {
                 margin-top:0.5em;
                 margin-bottom:0.25em;
@@ -89,7 +90,7 @@ This one is a single-file-CDN version that requires network connection to work.
                 color: white;
                 font-size: 1.5em;
                 font-weight:normal;
-                font-family:Verdana, Geneva, sans-serif; 
+                font-family:Verdana, Geneva, sans-serif;
                 height:1.7em;
             }
             #myProgress {
@@ -101,14 +102,14 @@ This one is a single-file-CDN version that requires network connection to work.
               width: 0%;
               height: 0.5em;
               background-color: #4CAF50;
-            } 
+            }
 
             #vdo_container {
               background-color: #000000;
-              margin:0px;        
+              margin:0px;
               text-align: center;
 
-            }   
+            }
             hr {
                 margin-top:0.5em;
                 margin-bottom:0.5em;
@@ -123,15 +124,15 @@ This one is a single-file-CDN version that requires network connection to work.
             #btn-stop-recording {
                 background-color: #eeeeee;
                 border:1px solid gray;
-                border-radius: 0.2em;            
+                border-radius: 0.2em;
                 color: #aa0000;
             }
             #btn-start-recording {
                 background-color: #eeeeee;
                 color: #00aa00;
                 border: 1px solid gray;
-                border-radius: 0.2em;            
-            }    
+                border-radius: 0.2em;
+            }
             a {
                 text-decoration: none;
                 color:white;
@@ -147,24 +148,24 @@ This one is a single-file-CDN version that requires network connection to work.
                 color:#ffffff;
             }
         </style>
-    <!--    <script src="jquery.min.js"></script>    
+    <!--    <script src="jquery.min.js"></script>
         <script src="RecordRTC.js"></script>
         <script src="EBML.js"></script>
         <script src="core.js"></script>
         <script src="md5.js"></script>
     -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>    
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/RecordRTC/5.5.9/RecordRTC.min.js"></script>
         <script src="https://www.webrtc-experiment.com/EBML.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/core.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/md5.js"></script>
-        
+
 
         <script>
-            //initialization on document loaded. 
+            //initialization on document loaded.
             var fullscr = false;
-            function init() {        
-                if ( window.location !== window.parent.location ) {	
+            function init() {
+                if ( window.location !== window.parent.location ) {
                     document.querySelector('body').style.fontSize = "12px";
                     fullscr = true;
                 }
@@ -183,7 +184,7 @@ This one is a single-file-CDN version that requires network connection to work.
                         });
                 }
                 //This part is on screen recording
-                var recorder; // globally accessible            
+                var recorder; // globally accessible
                 var video2 = document.querySelector('#scrpreview');
                 if (!navigator.getDisplayMedia && !navigator.mediaDevices.getDisplayMedia) {
                     var error = 'Your browser does NOT support the getDisplayMedia API.';
@@ -223,7 +224,7 @@ This one is a single-file-CDN version that requires network connection to work.
 
                         if (fullscr) {
                             var elem_win = parent.document.documentElement;
-                            openFullscreen(elem_win);  
+                            openFullscreen(elem_win);
                         }
                     });
                 };
@@ -232,7 +233,7 @@ This one is a single-file-CDN version that requires network connection to work.
                     this.disabled = true;
                     this.style.display = "none";
                     document.getElementById('btn-start-recording').disabled = false;
-                    document.getElementById('btn-start-recording').style.display = "inline";          
+                    document.getElementById('btn-start-recording').style.display = "inline";
                     recorder.stopRecording(stopRecordingCallback);
                 };
 
@@ -267,15 +268,15 @@ This one is a single-file-CDN version that requires network connection to work.
                                 addStreamStopListener(screen, function() {
                                     document.getElementById('btn-stop-recording').click();
                                 });
-                                callback(screen);    
+                                callback(screen);
                             });
                         } else {
                                 addStreamStopListener(screen, function() {
                                     document.getElementById('btn-stop-recording').click();
                                 });
-                                callback(screen);                        
+                                callback(screen);
                         }
-    //                    
+    //
 
                     }, function(error) {
                         console.error(error);
@@ -286,7 +287,7 @@ This one is a single-file-CDN version that requires network connection to work.
                 function stopRecordingCallback() {
                     console.log(document.getElementById("cid"));
                     var courseId = document.getElementById("cid").value;
-                    var studentId = document.getElementById("sid").value; 
+                    var studentId = document.getElementById("sid").value;
                     if (courseId != "" & studentId != "" ) {
                         filename = courseId + "-" + studentId + ".webm";
                     } else {
@@ -338,7 +339,7 @@ This one is a single-file-CDN version that requires network connection to work.
                     });
                 };
 
-            };            
+            };
         </script>
 
         <script>
@@ -358,7 +359,7 @@ This one is a single-file-CDN version that requires network connection to work.
                     console.log(document.getElementById("cid"));
                     console.log(document.getElementById("cid").value);
             };
-        </script>    
+        </script>
 
         <script>
          //Encryption and Hashing Part
@@ -387,7 +388,7 @@ This one is a single-file-CDN version that requires network connection to work.
                 offset += reader.result.length;
                 // callback for handling read chunk
                 // TODO: handle errors
-                chunkCallback(reader.result, offset, fileSize); 
+                chunkCallback(reader.result, offset, fileSize);
                 if (offset >= fileSize) {
                   endCallback(null);
                   return;
@@ -425,15 +426,15 @@ This one is a single-file-CDN version that requires network connection to work.
                   }
                 });
               });
-            }    
+            }
 
             function showmd5(res) {
                 res2 = res.toString();
-                document.getElementById("hashval").innerHTML = res2.substring(0, 10);    
+                document.getElementById("hashval").innerHTML = res2.substring(0, 10);
             }
             function clearHash() {
                 movebar(0);
-                document.getElementById("hashval").innerHTML = "";    
+                document.getElementById("hashval").innerHTML = "";
             }
 
             function movebar(prg) {
@@ -454,7 +455,7 @@ This one is a single-file-CDN version that requires network connection to work.
               } else if (elem_win.msRequestFullscreen) { /* IE/Edge */
                 elem_win.msRequestFullscreen();
               }
-            }        
+            }
         </script>
 
     </head>
@@ -463,7 +464,7 @@ This one is a single-file-CDN version that requires network connection to work.
         <div class="button_container">
         <button id="btn-start-recording" onclick="startRecording();">Start Rec.</button>
         <button id="btn-stop-recording" disabled="" style="display:none">Stop Rec.</button>
-        <span class="vbar">|</span><span id="rec-time">REC: </span>    
+        <span class="vbar">|</span><span id="rec-time">REC: </span>
         </div>
 
         <div id="vdo_container">
@@ -473,7 +474,7 @@ This one is a single-file-CDN version that requires network connection to work.
         <span class="vbar">|</span>Audio Rec. <input type="checkbox" id="audiorec" checked>
         </div>
         <div class="button_container">
-        </div>    
+        </div>
         <hr>
         <div class="cid_sid_container">
         <label for="cid">Course ID:</label><br>
@@ -491,18 +492,18 @@ This one is a single-file-CDN version that requires network connection to work.
         <!--<footer style="margin-top: 20px; text-align: left; font-family: sans-serif; font-size:small ">
             <p><b>Browser support:</b> Firefox, Edge and Chrome &gt;= 71</p>
             <div><small id="send-message"></small></div>
-        </footer> -->    
+        </footer> -->
         <div class="header">Checksum</div>
-        <input type="file" id="f1" size="60" onclick="clearHash()"> <br>   
-        <button id="btn" onclick="process()">Cal. Checksum</button>    
+        <input type="file" id="f1" size="60" onclick="clearHash()"> <br>
+        <button id="btn" onclick="process()">Cal. Checksum</button>
         <div id="hashval"></div>
         <div id="myProgress">
           <div id="myBar"></div>
         </div>
         <div class="footer" id="footerid">
-            <div class="help">1. <b>Start Rec.</b>: เริ่มบันทึก<br>2. <b>Stop Rec.</b>: หยุดบันทึก<br>3. <b>Choose File</b>: เลือกไฟล์เพื่อคำนวณ Checksum<br>4. <b>Cal. Checksum</b>: คำนวณค่า Checksum</div>    
+            <div class="help">1. <b>Start Rec.</b>: เริ่มบันทึก<br>2. <b>Stop Rec.</b>: หยุดบันทึก<br>3. <b>Choose File</b>: เลือกไฟล์เพื่อคำนวณ Checksum<br>4. <b>Cal. Checksum</b>: คำนวณค่า Checksum</div>
             <hr>
             <div class="help"> <a href="http://www.it.kmitl.ac.th" target="_blank"><b>ReXamHome</b></a> <span class="vbar" style="color:white;">|</span> <a href="http://www.it.kmitl.ac.th" target="_blank"><b>ITKMITL</b></a></div>
-        </div>    
+        </div>
     </body>
 </html>

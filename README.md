@@ -1,4 +1,6 @@
 
+#ReXamHome : Screen Recorder for proctoring exam from home
+
 ReXamHome is a small web (html+javascript) program that is used
 to record a computer screen and webcam to a video file.
 The main purpose of the program is for recording what
@@ -10,10 +12,10 @@ webcam recording. The second part is a utility to calculate
 a (video) file checksum. All captured information is processed
 and stored locally. A student must upload the file immediately after
 finishing the exam. In case that video uploading is
-not possible or with failure, students must send the video
+not possible or failed at the time the exam finishing, a student must send the video
 file checksum to exam proctors instead. An actual
-video file can be delivered to a proctor later.
-Sending a checksum is sometimes the only possibility for
+video file can be delivered to a proctor later to check exam integrity.
+Sending a checksum as a proof of video authenticity is sometimes needed for
 students who lack internet connection, low-speed connection,
 or whose connection is broken or unreliable.
 The program is composed of
@@ -23,4 +25,11 @@ The program is composed of
   - jquery-min.js
   - RecordRTC: RecordRTC.js, EBML.js
   - CryptoJS : core.js, md5.js
-- ReXamHome_cdn.html : an cloud or hosted version of ReXamHome.html. It links to a CDN version of the above javascript libraries.
+- ReXamHome_cdn.html : a cloud & hosted version of ReXamHome.html. It contains links to a CDN version of the above javascript libraries.
+
+For more information on related libaries see:
+- https://github.com/muaz-khan/RecordRTC
+- https://cryptojs.gitbook.io/docs/
+
+
+The program was developed for use at the Faculty of Information Technology (IT), King Mongkut's Institute of Technology Ladkrabang (KMITL). It is part of the research project on online learning and examination at the Interactive Media and Security Lab (ime-lab), Faculty of IT, KMITL.

@@ -1,5 +1,5 @@
-<!-- ReXamHome Launch Page  : Last update on 30 April 2020  
-This file is used to launch ReXamHome.html to recorde student's computer screen, webcam video+audio for proctoring an exam conducted at home.  
+<!-- ReXamHome Launch Page  : Last update on 3 May 2020 by IME-LAB ITKMITL
+This file is used to launch ReXamHome.html to recorde student's computer screen, webcam video+audio for proctoring an exam conducted at home.
 The 'record' part of the program was written by make use of the following libaries and sample codes:
   RecordRTC v5.5.9 (www.WebRTC-Experiment.com/licence)
   jquery
@@ -7,158 +7,160 @@ The 'record' part of the program was written by make use of the following libari
 -->
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <style>    
+  <head>
+    <title>RXH Launch Page</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family:Verdana, Geneva, sans-serif;
+            font-size:14px;
+            margin-top:0px;
+            margin-left:0px;
+            margin-right:0px;
+            margin-bottom:0px;
+        }
+        @media screen and (min-width: 600px) {
             body {
-                font-family:Verdana, Geneva, sans-serif;
-                font-size:14px;
-                margin-top:0px;
-                margin-left:0px;
-                margin-right:0px;
-                margin-bottom:0px;
+                font-size: 20px;
             }
-            @media screen and (min-width: 600px) {
-                body {
-                    font-size: 20px;
-                }
-            } 
-            @media (min-resolution: 200dpi) {
-                body {
-                    font-size: 24px;
-                }
-            }  
-            
-            .header1 {
-                margin-top:0em;
-                margin-bottom:0.5em;
-                margin-left:0em;
-                margin-right:0em;
-                padding-top:0.3em;
-                padding-bottom:0.3em;
-                width=100%;
-                text-align: center;
-                background: #000066;
-                color: white;
-                font-size: 2em;
-                font-weight:normal;
-            }   
-            
-            .header2 {
-                margin-top:0.5em;
-                margin-bottom:0.5em;
-                padding-top:0.3em;
-                padding-bottom:0.3em;
-                padding-left:0.25em;
-                padding-right:0.25em;
-                text-align: center;
-                font-size: 1.5em;
-                font-weight:normal;
-            }   
-            
-            .header3 {
-                padding-left:1.5em;
-                font-size:1.2em;
-            }     
-            
-            .btn_container {
-                margin-top:0.5em;
-                margin-bottom:0.5em;
-                text-align: center;
+        }
+        @media (min-resolution: 200dpi) {
+            body {
+                font-size: 24px;
+            }
+        }
 
-            } 
-            
-            button {
-                background-color: #f44336;
-                border: none;  
-                border-radius: 6px;            
-                color: #ffffff;
-                padding: 16px 16px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                font-size:1.5em;
-                transition-duration: 0.2s;
-                cursor: pointer;
-                
-            }
-            button:hover {
-              opacity: 0.8;
-              color: white;
-            }    
-            .vbar {
-                margin-right:5px;
-                margin-left:3px;
-                font-weight: normal;
-            }    
-            a {
-                text-decoration: none;
-                color:white;
-            }
-            a:hover {
-                text-decoration: underline;
-                color:white;
-            }  
-            
-            .instruction {
-                margin-top:2em;
-                margin-bottom:4em;
-                color: black;
-                font-size: 1em;
-                font-weight:normal;
-                background-color: #ffffff;
-                width: 100%;
+        .header1 {
+            margin-top:0em;
+            margin-bottom:0.5em;
+            margin-left:0em;
+            margin-right:0em;
+            padding-top:0.3em;
+            padding-bottom:0.3em;
+            width=100%;
+            text-align: center;
+            background: #000066;
+            color: white;
+            font-size: 2em;
+            font-weight:normal;
+        }
 
-            }  
-            ol, ul {
-                font-size:1em;
-                margin:2em;
-                margin-top:0.5em;
-            }
-            
-            .footer {
-                margin-top:2em;
-                margin-bottom:0em;
-                padding-top:0.75em;
-                padding-bottom:0.75em;
-                padding-left:1.5em;
-                padding-right:1em;
-                color: white;
-                font-size: 1em;
-                font-weight:bold;
-                background-color: #bbbbbb;
-                position: fixed;
-                left: 0;
-                bottom: 0;
-                width: 100%;
-            } 
-            
-            #update {
-                padding-left:1.5em;
-                color: white;
-                font-size: 0.8em;
-                font-weight:normal;
-            }              
-        </style>
-        <script>
-            var rexam_win;
-            function openWin() {
-              var winh = window.screen.availHeight;
-              var winw = window.screen.availWidth / 6;
-              winw = Math.round(winw);
-              if (winw < 200) {
-                  winw = 200;
-              }
-              console.log(winw);
-              //var leftpos = window.screen.availWidth - 100;
-              var options = "width=" + winw + ",height=" + winh + ", menubar=no, toolbar=no, location=no, left=0";
-              rexam_win = window.open("ReXamHome.html", "_blank", options);
-            }
+        .header2 {
+            margin-top:0.5em;
+            margin-bottom:0.5em;
+            padding-top:0.3em;
+            padding-bottom:0.3em;
+            padding-left:0.25em;
+            padding-right:0.25em;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight:normal;
+        }
 
-        </script>
-    </head>
-<body>
+        .header3 {
+            padding-left:1.5em;
+            font-size:1.2em;
+        }
 
+        .btn_container {
+            margin-top:0.5em;
+            margin-bottom:0.5em;
+            text-align: center;
+
+        }
+
+        button {
+            background-color: #f44336;
+            border: none;
+            border-radius: 6px;
+            color: #ffffff;
+            padding: 16px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size:1.5em;
+            transition-duration: 0.2s;
+            cursor: pointer;
+
+        }
+        button:hover {
+          opacity: 0.8;
+          color: white;
+        }
+        .vbar {
+            margin-right:5px;
+            margin-left:3px;
+            font-weight: normal;
+        }
+        a {
+            text-decoration: none;
+            color:black;
+        }
+        .footer a {
+            color:white;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .instruction {
+            margin-top:2em;
+            margin-bottom:4em;
+            color: black;
+            font-size: 1em;
+            font-weight:normal;
+            background-color: #ffffff;
+            width: 100%;
+
+        }
+        ol, ul {
+            font-size:1em;
+            margin:2em;
+            margin-top:0.5em;
+        }
+
+        .footer {
+            margin-top:2em;
+            margin-bottom:0em;
+            padding-top:0.75em;
+            padding-bottom:0.75em;
+            padding-left:1.5em;
+            padding-right:1em;
+            color: white;
+            font-size: 1em;
+            font-weight:bold;
+            background-color: #bbbbbb;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        #update {
+            padding-left:1.5em;
+            color: white;
+            font-size: 0.8em;
+            font-weight:normal;
+        }
+    </style>
+    <script>
+        var rexam_win;
+        function openWin() {
+          var winh = window.screen.availHeight;
+          var winw = window.screen.availWidth / 6;
+          winw = Math.round(winw);
+          if (winw < 200) {
+              winw = 200;
+          }
+          console.log(winw);
+          //var leftpos = window.screen.availWidth - 100;
+          var options = "width=" + winw + ",height=" + winh + ", menubar=no, toolbar=no, location=no, left=0";
+          rexam_win = window.open("ReXamHome.html", "_blank", options);
+        }
+
+    </script>
+  </head>
+  <body>
     <div class="header1">ReXamHome</div>
     <div class="header2">Screen+Camera Recording for Exam from Home</div>
     <div class="btn_container"><button onclick="openWin()">Launch ReXamHome</button></div>
@@ -170,7 +172,7 @@ The 'record' part of the program was written by make use of the following libari
             <li><b>Stop Rec.</b>: หยุดบันทึก</li>
             <li><b>Choose File</b>: เลือกไฟล์เพื่อคำนวณ Checksum</li>
             <li><b>Cal. Checksum</b>: คำนวณค่า Checksum</li>
-            <li>ส่งค่า Checksum + ไฟล์วีดีโอ (เช่น ผ่านทาง SMS เฉพาะ Checksum, ระบบจัดสอบออนไลน์, Google Form)</li>       
+            <li>ส่งค่า Checksum + ไฟล์วีดีโอ (เช่น ผ่านทาง SMS เฉพาะ Checksum, ระบบจัดสอบออนไลน์, Google Form)</li>
         </ol>
         <b class="header3">ตัวเลือก:</b>
         <ul>
@@ -181,15 +183,20 @@ The 'record' part of the program was written by make use of the following libari
         <b class="header3">หมายเหตุ:</b>
             <ul>
             <li>ทดสอบกับ Google Chrome บน PC/Notebook/Chromebook (desktop version) การใช้งานกับโปรแกรมเว็บบราวเซอร์อื่น ๆ เวอร์ชันเก่า ๆ ของ Google Chrome หรือเวอร์ชันบนโทรศัพท์หรือแท็บเล็ต อาจไม่ทำงานหรือทำงานได้ไม่สมบูรณ์</li>
-            <li>โปรแกรมทำงานได้โดยไม่ต้องอาศัยการเชื่อมต่อเครือข่าย (ยกเว้นในกรณีที่เปิดโปรแกรมผ่านเซิร์ฟเวอร์ที่ให้บริการโปรแกรม ReXamHome  แทนการดาวน์โหลดมาลงที่เครื่องผู้สอบ) การทำงานและการบันทึกภาพและเสียงเกิดขึ้นที่เครื่องคอมพิวเตอร์ของผู้สอบ โปรแกรมไม่มีการส่งภาพหรือเสียง หรือข้อมูลอื่นใดไปเผยแพร่หรือจัดเก็บบนเครือข่ายแต่อย่างใด การนำส่งไฟล์วีดีโอที่ได้จากการบันทึกหน้าจอ ต้องกระทำผ่านช่องทางอื่น</li> 
-            <li>ระหว่างบันทึกหน้าจอ หากมีการปิดหน้าจอ 'Recorder & Checksum' (ไม่ใช่หน้าจอนี้ที่ใช้แสดงข้อความที่กำลังอ่านอยู่นี้) หรือทำการรีเฟรชหน้าจอดังกล่าว ก่อนที่จะทำการสั่งหยุดการบันทึก จะทำให้ข้อมูลที่กำลังทำการบันทึกอยู่สูญหายได้</li>                
-            <li>ไฟล์ที่บันทึกภาพและเสียง ถูกจัดเก็บในรูปแบบ .webm  สามารถเปิดอ่านได้ผ่านโปรแกรมเว็บบราวเซอร์ หรือโปรแกรมดูภาพวีดีโอ เช่น VLC Player</li>  
-            <li>ค่า Checksum คำนวณโดยใช้ฟังก์ชัน MD5 โดยแสดงเฉพาะตัวเลข 10 ตำแหน่งแรกจากทั้งหมด 32 หลัก ทั้งนี้ เพื่อความสะดวกในการนำค่าดังกล่าวไปส่งผ่านช่องทางต่าง ๆ</li>                  
+            <li>โปรแกรมทำงานได้โดยไม่ต้องอาศัยการเชื่อมต่อเครือข่าย (ยกเว้นในกรณีที่เปิดโปรแกรมผ่านเซิร์ฟเวอร์ที่ให้บริการโปรแกรม ReXamHome  แทนการดาวน์โหลดมาลงที่เครื่องผู้สอบ) การทำงานและการบันทึกภาพและเสียงเกิดขึ้นที่เครื่องคอมพิวเตอร์ของผู้สอบ โปรแกรมไม่มีการส่งภาพหรือเสียง หรือข้อมูลอื่นใดไปเผยแพร่หรือจัดเก็บบนเครือข่ายแต่อย่างใด การนำส่งไฟล์วีดีโอที่ได้จากการบันทึกหน้าจอ ต้องกระทำผ่านช่องทางอื่น</li>
+            <li>ระหว่างบันทึกหน้าจอ หากมีการปิดหน้าจอ ReXamHome Main หรือ 'Recorder & Checksum' (ไม่ใช่หน้าจอนี้ที่ใช้แสดงข้อความที่กำลังอ่านอยู่นี้) หรือทำการรีเฟรชหน้าจอดังกล่าว ก่อนที่จะทำการสั่งหยุดการบันทึก จะทำให้ข้อมูลที่กำลังทำการบันทึกอยู่สูญหายได้</li>
+            <li>ไฟล์ที่บันทึกภาพและเสียง ถูกจัดเก็บในรูปแบบ .webm  สามารถเปิดอ่านได้ผ่านโปรแกรมเว็บบราวเซอร์ หรือโปรแกรมดูภาพวีดีโอ เช่น VLC Player</li>
+            <li>ค่า Checksum คำนวณโดยใช้ฟังก์ชัน MD5 โดยแสดงเฉพาะตัวเลข 10 ตำแหน่งแรกจากทั้งหมด 32 หลัก ทั้งนี้ เพื่อความสะดวกในการนำค่าดังกล่าวไปส่งผ่านช่องทางต่าง ๆ</li>
             <li>การใช้ภาพวีดีโอที่บันทึกได้จากโปรแกรม ReXamHome พึงพิจารณาข้อจำกัดอันเกิดจากมุมมองของกล้องที่ถ่ายภาพผู้สอบ เช่น ในกรณีของกล้องเว็บแคมที่ติดตั้งมาพร้อมกับเครื่องคอมพิวเตอร์แบบ notebook และ All-in-One Desktop PC มุมมองจากกล้องประเภทดังกล่าวมักไม่ครอบคลุมด้านหน้าบริเวณแป้นพิมพ์ และด้านหลังจอ</li>
+        </ul>
+        <b class="header3">บทความ/เอกสารอ้างอิง:</b>
+        <ul>
+          <li><a href="https://medium.com/@nop_itkmitl/rexamhome-โปรแกรมบันทึกหน้าจอการทำข้อสอบจากที่บ้าน-d3d34582a5f6" target="_blank">ReXamHome : โปรแกรมบันทึกหน้าจอการทำข้อสอบจากที่บ้าน</a></li>
+          <li><a href="https://medium.com/@nop_itkmitl/การจัดสอบในที่พักของผู้สอบ-exam-from-home-ตอนที่-1-55508acc735f" target="_blank">การจัดสอบในที่พักของผู้สอบ (Exam from Home)</a></li>
         </ul>
     </div>
     <div class="footer">
-        <a href="https://www.bebrasthailand.org" target="_blank">ReXamHome</a> <span class="vbar">|</span> <a id="itkmitl" href="http://www.it.kmitl.ac.th" target="_blank">ITKMITL</a> <span id="update">Last updated: 30 April 2020</span>
+        <a href="https://github.com/ime-lab/ReXamHome" target="_blank">ReXamHome</a> <span class="vbar">|</span> <a id="itkmitl" href="http://www.it.kmitl.ac.th" target="_blank">ITKMITL</a> <span class="vbar">|</span><a id="itkmitl" href="https://www.it.kmitl.ac.th/en/research-en/met-group/" target="_blank">IME-LAB</a>
     </div>
-</body>
+  </body>
 </html>
