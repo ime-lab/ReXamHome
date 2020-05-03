@@ -1,4 +1,4 @@
-<!-- ReXamHome  : Last update on 1 May 2020 by IME-LAB ITKMITL
+<!-- ReXamHome  : Last update on 3 May 2020 by IME-LAB ITKMITL
 This program records student's computer screen, webcam video+audio for proctoring an exam conducted at home.
 The program was written by make use of the following libaries and sample codes:
   RecordRTC v5.5.9 (www.WebRTC-Experiment.com/licence)
@@ -8,7 +8,7 @@ This one is a single-file-CDN version that requires network connection to work.
 -->
 <html>
     <head>
-        <title>ReXamHome Main</title>            
+        <title>ReXamHome Main</title>
         <meta charset="UTF-8">
         <style>
             body {
@@ -211,7 +211,8 @@ This one is a single-file-CDN version that requires network connection to work.
                                 var duration = (new Date().getTime() - timestamps[0]) / 1000;
                                 var ttext = Math.round(duration);
                                 if(duration < 0) return;
-                                document.getElementById('rec-time').innerHTML = "REC: " + ttext + " s";
+                                //document.getElementById('rec-time').innerHTML = "REC: " + ttext + " s";
+                                document.getElementById('rec-time').innerHTML = "REC: " + sec2time(ttext);
                             }
                         });
                         recorder.startRecording();
@@ -456,6 +457,19 @@ This one is a single-file-CDN version that requires network connection to work.
                 elem_win.msRequestFullscreen();
               }
             }
+        </script>
+        <script>
+          //convert seconds to HH:MM:SEC
+          function sec2time2(sec_num) {
+            var hours   = Math.floor(sec_num / 3600);
+            var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+            var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+            if (hours   < 10) {hours   = "0"+hours;}
+            if (minutes < 10) {minutes = "0"+minutes;}
+            if (seconds < 10) {seconds = "0"+seconds;}
+            return hours + ':' + minutes + ':' + seconds;
+          }
         </script>
 
     </head>
