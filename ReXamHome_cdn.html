@@ -1,4 +1,4 @@
-<!-- ReXamHome  : Last update on 3 May 2020 by IME-LAB ITKMITL
+<!-- ReXamHome  : Last update on 21 May 2020 by IME-LAB ITKMITL
 This program records student's computer screen, webcam video+audio for proctoring an exam conducted at home.
 The program was written by make use of the following libaries and sample codes:
   RecordRTC v5.5.9 (www.WebRTC-Experiment.com/licence)
@@ -201,7 +201,7 @@ This one is a single-file-CDN version that requires network connection to work.
                         video2.srcObject = screen;
                         recorder = RecordRTC(screen, {
                             type: 'video',
-                            mimetye:'video/webm',
+                            mimeType:'video/webm\;codecs=vp9', //corrected typo and set default codec
                             //bitsPerSecond: 512000, //for students with low storage space
                             bitsPerSecond: 1024000,
                             frameRate:5,
